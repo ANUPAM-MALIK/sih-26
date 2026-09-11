@@ -1,0 +1,80 @@
+openapi: 3.0.3
+info:
+  title: N-LAMS API
+  version: 0.1.0
+  description: Canonical monitoring and orchestration API. External systems remain systems of record.
+servers:
+  - url: http://localhost:4000/api
+security:
+  - bearerAuth: []
+paths:
+  /health:
+    get:
+      security: []
+      summary: API health
+      responses: { '200': { description: Healthy service } }
+  /dashboard/summary:
+    get:
+      summary: National dashboard summary
+      responses: { '200': { description: Summary metrics } }
+  /projects:
+    get:
+      summary: List projects
+      responses: { '200': { description: Project collection } }
+    post:
+      summary: Create a project
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ProjectInput' } } } }
+      responses: { '201': { description: Created } }
+  /projects/{id}:
+    get:
+      summary: Get project
+      parameters: [{ $ref: '#/components/parameters/id' }]
+      responses: { '200': { description: Project } }
+  /cases:
+    get:
+      summary: List acquisition cases
+      responses: { '200': { description: Case collection } }
+  /cases/{id}:
+    get:
+      summary: Get acquisition case
+      parameters: [{ $ref: '#/components/parameters/id' }]
+      responses: { '200': { description: Acquisition case } }
+  /cases/{id}/workflow/start:
+    post:
+      summary: Start a configurable workflow instance
+      parameters: [{ $ref: '#/components/parameters/id' }]
+      responses: { '201': { description: Workflow task created } }
+  /tasks/{id}/complete:
+    post:
+      summary: Complete a workflow task
+      parameters: [{ $ref: '#/components/parameters/id' }]
+      responses: { '200': { description: Task completed } }
+  /tasks/{id}/reject:
+    post:
+      summary: Reject a workflow task
+      parameters: [{ $ref: '#/components/parameters/id' }]
+      responses: { '200': { description: Task rejected } }
+  /documents/presigned-upload:
+    post:
+      summary: Create an authorized presigned upload URL
+      responses: { '200': { description: Presigned URL and object key } }
+  /integrations/{system}/status:
+    get:
+      summary: Check adapter status
+      parameters: [{ name: system, in: path, required: true, schema: { type: string } }]
+      responses: { '200': { description: Adapter status } }
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
+  parameters:
+    id: { name: id, in: path, required: true, schema: { type: string } }
+  schemas:
+    ProjectInput:
+      type: object
+      required: [name, department, state, district, type]
+      properties:
+        name: { type: string }
+        department: { type: string }
+        state: { type: string }
+        district: { type: string }
+        type: { type: string }
