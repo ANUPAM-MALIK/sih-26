@@ -104,7 +104,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
         <div className="profile-mini">
           <div className="avatar avatar-sm">NS</div>
           <div>
-            <strong>National Admin</strong>
+            <strong>Nova-X</strong>
             <span>Ministry dashboard</span>
           </div>
           <MoreHorizontal size={17} />
