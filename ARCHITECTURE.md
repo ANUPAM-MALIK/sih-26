@@ -1,6 +1,6 @@
 # N-LAMS Architecture
 
-N-LAMS is a national integration and orchestration layer. Existing departmental, state land-record, PFMS, Bhoomi Rashi, and railway systems remain authoritative systems of record; N-LAMS maintains a canonical monitoring view, workflow state, document metadata, and audit history.
+N-LAMS is a national integration and orchestration layer. Existing departmental, state land-record, PFMS, Bhoomi Rashi, and railway systems remain authoritative systems of record; N-LAMS maintains a canonical monitoring view, configurable workflow state, document metadata, notifications, reports, and audit history. Local development uses a persistent JSON repository so the demo works without cloud credentials; the canonical production path is Supabase/PostGIS.
 
 ## System architecture
 
@@ -25,7 +25,7 @@ The canonical model uses UUID primary keys and normalized entities: `projects`, 
 
 ## Authentication architecture
 
-Supabase Auth owns email/password, verification, password reset, sessions, and future MFA enrollment. The API validates bearer access tokens with Supabase and derives the user's profile and roles. The local demo mode uses a clearly marked demo session so the UI is runnable without cloud credentials.
+Supabase Auth owns email/password, verification, password reset, sessions, and future MFA enrollment. In `AUTH_MODE=supabase`, the API validates bearer access tokens with Supabase. In isolated `AUTH_MODE=demo`, explicitly seeded demo credentials map to local roles; this fallback is not a production authentication mechanism.
 
 ## RBAC model
 

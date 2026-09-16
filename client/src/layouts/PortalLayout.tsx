@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   Activity,
@@ -19,6 +19,8 @@ import {
   Users,
   X,
 } from "lucide-react";
+import { api, currentUser, logout } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const navGroups = [
   [
@@ -41,11 +43,13 @@ const navGroups = [
 ] as const;
 export function PortalLayout() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate(); const user = currentUser();
+  useEffect(() => { if (!user) navigate("/login"); }, [navigate, user]);
   return (
     <div className="app-shell">
       <Sidebar open={open} onClose={() => setOpen(false)} />
       <div className="main-shell">
-        <Topbar onMenu={() => setOpen(true)} />
+        <Topbar onMenu={() => setOpen(true)} user={user} />
         <main className="page-content">
           <Outlet />
         </main>
@@ -113,7 +117,7 @@ function Sidebar({ open, onClose }: { open: boolean; onClose: () => void }) {
     </aside>
   );
 }
-function Topbar({ onMenu }: { onMenu: () => void }) {
+function Topbar({ onMenu, user }: { onMenu: () => void; user: ReturnType<typeof currentUser> }) {
   const location = useLocation();
   const title = location.pathname.startsWith("/projects/")
     ? "Project workspace"
@@ -137,17 +141,17 @@ function Topbar({ onMenu }: { onMenu: () => void }) {
           <span>⌕</span>
           <input placeholder="Search case, project, parcel…" />
         </div>
-        <button className="icon-button notification">
+        <button className="icon-button notification" title="Notifications">
           <Bell size={19} />
           <i />
         </button>
         <div className="top-profile">
           <div className="avatar">NS</div>
           <div>
-            <strong>National Admin</strong>
-            <span>SUPER_ADMIN</span>
+            <strong>{user?.displayName || "Not signed in"}</strong>
+            <span>{user?.role || ""}</span>
           </div>
-          <ChevronRight size={15} />
+          <button className="icon-button" title="Sign out" onClick={() => { logout(); window.location.href = "/login"; }}><ChevronRight size={15} /></button>
         </div>
       </div>
     </header>
