@@ -6,6 +6,8 @@ export const env = {
   supabaseUrl: process.env.SUPABASE_URL || '',
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
   storageDriver: process.env.STORAGE_DRIVER || 'local',
+  authMode: process.env.AUTH_MODE || 'demo',
+  dataDriver: process.env.DATA_DRIVER || 'local-json',
+  dataFile: process.env.NLAMS_DATA_FILE || '.data/nlams.json',
   maxUploadBytes: Number(process.env.MAX_UPLOAD_BYTES || 10485760),
 };
-

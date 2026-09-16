@@ -7,17 +7,22 @@ export interface LandRecordsAdapter {
   }>;
   getDocuments(externalId: string): Promise<string[]>;
 }
+
+
 export interface AcquisitionSystemAdapter {
   getCase(
     externalId: string,
   ): Promise<{ externalId: string; status: string; lastSyncedAt: string }>;
   getCaseStatus(externalId: string): Promise<string>;
 }
+
+
 export interface PaymentSystemAdapter {
   getPaymentStatus(
     externalId: string,
   ): Promise<{ status: string; paidAmount: number; reference?: string }>;
 }
+
 
 export class MockLandRecordsAdapter implements LandRecordsAdapter {
   async getParcel(externalId: string) {
@@ -32,6 +37,8 @@ export class MockLandRecordsAdapter implements LandRecordsAdapter {
     return ["Land_Record_Kaddon.pdf", "Village_Map_118A.pdf"];
   }
 }
+
+
 export class MockAcquisitionAdapter implements AcquisitionSystemAdapter {
   async getCase(externalId: string) {
     return {
@@ -44,6 +51,8 @@ export class MockAcquisitionAdapter implements AcquisitionSystemAdapter {
     return "IN_PROGRESS";
   }
 }
+
+
 export class MockPfmsAdapter implements PaymentSystemAdapter {
   async getPaymentStatus(_externalId: string) {
     return {

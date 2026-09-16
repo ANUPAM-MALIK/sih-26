@@ -1,18 +1,17 @@
+import { loadState, saveState, dbPath } from "./repositories/local.repository.js";
+const state = loadState();
+saveState(state);
 console.log(
   JSON.stringify({
     level: "info",
-    message:
-      "Demo seed is represented in the frontend fallback and Supabase SQL migration.",
+    message: `Idempotent local demo seed persisted to ${dbPath}. Use Supabase service-role seeding for cloud Auth deployments.`,
     records: {
-      departments: 3,
-      states: 5,
-      districts: 10,
-      projects: 5,
-      cases: 20,
-      parcels: 30,
-      documents: 42,
-      versions: 61,
-      auditLogs: 148,
+      projects: state.projects.length,
+      cases: state.cases.length,
+      parcels: state.parcels.length,
+      tasks: state.tasks.length,
+      notifications: state.notifications.length,
+      auditLogs: state.audits.length,
     },
   }),
 );
